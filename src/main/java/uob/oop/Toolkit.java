@@ -63,47 +63,43 @@ public class Toolkit {
     public List<NewsArticles> loadNews() {
 
         List<NewsArticles> listNews = new ArrayList<>();
-        File folder;
-        List<String> htmls = new ArrayList<>();
-        try {
-            folder = new File(String.valueOf((getFileFromResource("News"))));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            if (folder.exists() && folder.isDirectory()) {
-                File[] htms = folder.listFiles();
-                for (File htm : htms) {
-                    if (htm.getName().endsWith(".htm")) {
-                        try {
-                            BufferedReader newReader = new BufferedReader(new FileReader(htm.toPath().toFile()));
-                            String strLine;
-                            StringBuilder body = new StringBuilder();
-                            while ((strLine = newReader.readLine()) != null) {
-                                body.append(strLine);
-                            }
-                            htmls.add(String.valueOf((body)));
-                            newReader.close();
 
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+        try {
+            File folder = getFileFromResource("News");
+            File[] files = folder.listFiles();
+
+            if (files != null) {
+                for(File file:files) {
+                    try {
+                        BufferedReader myReadear = new BufferedReader(new FileReader(file));
+                        StringBuilder text = new StringBuilder();
+
+                        String stringLine;
+
+                        while ((stringLine = myReadear.readLine()) != null) {
+                            text.append(stringLine);
                         }
+
+                        String articleTitle = HtmlParser.getNewsTitle(text.toString());
+                        String articleContent = HtmlParser.getNewsContent(text.toString());
+                        NewsArticles.DataType articleType = HtmlParser.getDataType(text.toString());
+                        String articleLabel = HtmlParser.getLabel(text.toString());
+
+                        NewsArticles articleObj = new NewsArticles(articleTitle,articleContent,articleType,articleLabel);
+
+                        listNews.add(articleObj);
+
+
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
-
-
-        } finally {
-            for (String file : htmls) {
-                String title = HtmlParser.getNewsTitle(file);
-                String content = HtmlParser.getNewsContent(file);
-                NewsArticles.DataType dataType = HtmlParser.getDataType(file);
-                String label = HtmlParser.getLabel(file);
-                NewsArticles articleObject = new NewsArticles(title, content, dataType, label);
-
-                listNews.add(articleObject);
-            }
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
+
+
         return listNews;
     }
 

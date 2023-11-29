@@ -5,6 +5,8 @@ import edu.stanford.nlp.pipeline.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -33,36 +35,49 @@ public class ArticlesEmbedding extends NewsArticles {
     public String getNewsContent() {
         //TODO Task 5.3 - 10 Marks
 
-        try {
+        List<String> lemText = new ArrayList<>();
+        String content = textCleaning(super.getNewsContent());
 
-            String content = textCleaning(super.getNewsContent());
 
-            Properties props = new Properties();
+            try {
+                Properties props = new Properties();
 
-            props.setProperty("annotators", "tokenize,pos,lemma");
-            StanfordCoreNLP pipeLine = new StanfordCoreNLP(props);
-            CoreDocument document = new CoreDocument(content);
+                props.setProperty("annotators", "tokenize,pos,lemma");
+                StanfordCoreNLP pipeLine = new StanfordCoreNLP(props);
+                CoreDocument document = new CoreDocument(content);
 
-            pipeLine.annotate(document);
+                pipeLine.annotate(document);
 
-            List<CoreLabel> tokens = document.tokens();
+                List<CoreLabel> tokens = document.tokens();
 
-            for (CoreLabel token: tokens) {
-                String lemma = token.lemma();
-                for (int i = 0; i < Toolkit.STOPWORDS.length; i++) {
-                    if (!lemma.equals(Toolkit.STOPWORDS[i])) {
-                        processedText += lemma + " ";
+                for (CoreLabel token : tokens) {
+                    String lemma = token.lemma();
+                    lemText.add(lemma);
+                }
+
+
+                StringBuilder processedTextBuilder = new StringBuilder();
+
+                for (String lemma : lemText) {
+                    boolean isStopWord = false;
+                    for (String stopWord : Toolkit.STOPWORDS) {
+                        if (lemma.equals(stopWord)) {
+                            isStopWord = true;
+                            break;
+                        }
+                    }
+                    if (!isStopWord) {
+                        processedTextBuilder.append(lemma).append(" ");
                     }
                 }
+
+                // Remove the trailing space and convert to a string
+
+                processedText = processedTextBuilder.toString().trim();
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
         return processedText.trim();
     }
 
