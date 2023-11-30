@@ -1,7 +1,9 @@
 package uob.oop;
 
-import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
@@ -42,7 +44,7 @@ public class Toolkit {
                 listVectors.add(wordValues);
             }
 
-        } catch (FileNotFoundException | URISyntaxException e) {
+        } catch (URISyntaxException e) {
             throw new IOException(e.getMessage());
         } finally {
             assert myReader != null;

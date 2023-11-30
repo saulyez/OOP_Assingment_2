@@ -37,19 +37,19 @@ public class ArticlesEmbeddingTest {
         assertEquals("coronavirus disease 2019 covid19 contagious disease cause virus sarscov2 first know case identify wuhan china december 20196 disease quickly spread worldwide result covid19 pandemic symptom covid19 variable include fever7 cough headache8 fatigue breathing difficulty loss smell loss taste91011 symptom begin one fourteen day exposure virus third person infect develop noticeable symptoms1213 develop symptom noticeable enough classify patient 81 develop mild moderate symptom up mild pneumonia 14 develop severe symptom dyspnea hypoxia more 50 lung involvement imaging 5 develop critical symptom respiratory failure shock multiorgan dysfunction14 old person high risk develop severe symptom person continue experience range effect long covid year infection damage organ observed15 multiyear study underway further investigate longterm effect disease16 covid19 transmit infectious particle breathe come contact eye nose mouth risk high person close proximity small airborne particle contain virus remain suspend air travel over long distance particularly indoors transmission occur person touch eye nose mouth touch surface object contaminate virus person remain contagious up 20 day spread virus even develop symptoms17 testing method covid19 detect viruss nucleic acid include realtime reverse transcription polymerase chain reaction rtpcr1819 transcriptionmediate amplification181920 reverse transcription loopmediate isothermal amplification rtlamp1819 nasopharyngeal swab21 several covid19 vaccine approve distribute various country initiate mass vaccination campaign preventive measure include physical social distancing quarantine ventilation indoor space use face mask covering public covering cough sneeze hand washing keep unwashed hand away face work underway develop drug inhibit virus primary treatment symptomatic management involve treatment symptom through supportive care isolation experimental measure", myEmbedding.getNewsContent());
     }
 
-//    @Test
-//    void getNewsContent_Performance() {
-//        long totalTime = 0;
-//        for (int i = 0; i < 100; i++) {
-//            mySW.start();
-//            myEmbedding.getNewsContent();
-//            mySW.stop();
-//            totalTime += mySW.getNanoTime();
-//            mySW.reset();
-//        }
-//        System.out.println("Average execution time: " + (totalTime / 100));
-//        assertTrue(totalTime / 100 < 13000000);
-//    }
+    @Test
+    void getNewsContent_Performance() {
+        long totalTime = 0;
+        for (int i = 0; i < 100; i++) {
+            mySW.start();
+            myEmbedding.getNewsContent();
+            mySW.stop();
+            totalTime += mySW.getNanoTime();
+            mySW.reset();
+        }
+        System.out.println("Average execution time: " + (totalTime / 100));
+        assertTrue(totalTime / 100 < 13000000);
+    }
 
     @Test
     void getEmbedding_Functional() throws Exception {
