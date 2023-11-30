@@ -20,7 +20,6 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 public class AdvancedNewsClassifier {
     public Toolkit myTK = null;
     public static List<NewsArticles> listNews = null;
@@ -92,7 +91,36 @@ public class AdvancedNewsClassifier {
 
     public int calculateEmbeddingSize(List<ArticlesEmbedding> _listEmbedding) {
         int intMedian = -1;
-        //TODO Task 6.2 - 5 Marks
+        ArrayList<Integer> lengths = new ArrayList<Integer>();
+
+        for (ArticlesEmbedding article : _listEmbedding) {
+            String content = article.getNewsContent();
+            String[] contents = content.split("\\s+");
+            int count = 0;
+
+            for (String word : contents) {
+                if(Toolkit.getListVocabulary().contains(word)){
+                    count++;
+
+                }
+            }
+
+            lengths.add(count);
+        }
+        System.out.println(lengths);
+        lengths.sort(null);
+        System.out.println(lengths);
+
+        int size = lengths.size();
+        if (size > 0) {
+            if (size % 2 == 0) {
+                int median1 = lengths.get(size / 2 - 1);
+                int median2 = lengths.get(size / 2);
+                intMedian = (median1 + median2) / 2;
+            } else {
+                intMedian = lengths.get((size - 1) / 2);
+            }
+        }
 
         return intMedian;
     }
