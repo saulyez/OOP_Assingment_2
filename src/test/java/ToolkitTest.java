@@ -6,6 +6,7 @@ import uob.oop.Toolkit;
 import java.io.IOException;
 import java.util.List;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,7 +47,6 @@ class ToolkitTest {
             totalTime += mySW.getTime();
             mySW.reset();
         }
-
         System.out.println("Average execution time: " + (totalTime / 20));
         assertTrue(totalTime / 20 < 280);
     }

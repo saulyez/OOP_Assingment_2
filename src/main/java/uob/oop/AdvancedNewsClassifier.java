@@ -57,6 +57,25 @@ public class AdvancedNewsClassifier {
     public List<Glove> createGloveList() {
         List<Glove> listResult = new ArrayList<>();
         //TODO Task 6.1 - 5 Marks
+        int stops = Toolkit.STOPWORDS.length;
+
+        for (int i = 0; i < Toolkit.listVocabulary.size(); i++) {
+            String word = Toolkit.listVocabulary.get(i);
+            boolean isStop = false;
+
+            for (int j = 0; j < stops; j++ ) {
+                if (word.equals(Toolkit.STOPWORDS[j])) {
+                    isStop = true;
+                    break;
+                }
+            }
+            if(!isStop) {
+                Vector vector = new Vector(Toolkit.listVectors.get(i));
+                Glove myGlove = new Glove(word, vector);
+
+                listResult.add(myGlove);
+           }
+        }
 
         return listResult;
     }
