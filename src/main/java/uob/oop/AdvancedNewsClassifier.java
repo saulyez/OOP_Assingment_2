@@ -110,7 +110,7 @@ public class AdvancedNewsClassifier {
             lengths.add(count);
         }
         lengths.sort(null);
-        System.out.println(lengths);
+
         int size = lengths.size();
             if (size % 2 == 0) {
                 int median1 = lengths.get(size / 2);
