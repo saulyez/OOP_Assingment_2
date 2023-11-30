@@ -60,7 +60,7 @@ public class ArticlesEmbedding extends NewsArticles {
             }
         }
 
-        processedText = processedTextBuilder.toString().trim();
+        processedText = processedTextBuilder.toString().toLowerCase();
 
         return processedText.trim();
     }

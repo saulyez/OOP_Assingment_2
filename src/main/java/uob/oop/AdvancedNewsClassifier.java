@@ -99,28 +99,27 @@ public class AdvancedNewsClassifier {
             int count = 0;
 
             for (String word : contents) {
-                if(Toolkit.getListVocabulary().contains(word)){
-                    count++;
-
+                for (Glove myglove : listGlove) {
+                    if (myglove.getVocabulary().equals(word)) {
+                        count++;
+                        break;  // Exit the inner loop when a match is found
+                    }
                 }
             }
 
             lengths.add(count);
         }
-        System.out.println(lengths);
         lengths.sort(null);
         System.out.println(lengths);
-
         int size = lengths.size();
-        if (size > 0) {
             if (size % 2 == 0) {
-                int median1 = lengths.get(size / 2 - 1);
-                int median2 = lengths.get(size / 2);
+                int median1 = lengths.get(size / 2);
+                int median2 = lengths.get(size / 2 + 1);
                 intMedian = (median1 + median2) / 2;
             } else {
-                intMedian = lengths.get((size - 1) / 2);
+                intMedian = lengths.get((size + 1) / 2);
             }
-        }
+
 
         return intMedian;
     }
