@@ -1,8 +1,10 @@
 package uob.oop;
 
+import com.sun.source.tree.TryTree;
 import edu.stanford.nlp.ling.*;
 import edu.stanford.nlp.pipeline.*;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.cpu.nativecpu.NDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
 import java.util.Properties;
@@ -44,34 +46,57 @@ public class ArticlesEmbedding extends NewsArticles {
 
         pipeLine.annotate(document);
 
-        StringBuilder processedTextBuilder = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
         for (CoreLabel token : document.tokens()) {
-            String lemma = token.lemma();
-            boolean isStopWord = false;
+            String lem = token.lemma();
+            boolean isStop = false;
             for (String stopWord : Toolkit.STOPWORDS) {
-                if (lemma.equals(stopWord)) {
-                    isStopWord = true;
+                if (lem.equals(stopWord)) {
+                    isStop = true;
                     break;
                 }
             }
-            if (!isStopWord) {
-                processedTextBuilder.append(lemma).append(" ");
+            if (!isStop) {
+                builder.append(lem).append(" ");
             }
         }
 
-        processedText = processedTextBuilder.toString().toLowerCase();
+        processedText = builder.toString().toLowerCase();
 
         return processedText.trim();
     }
 
     public INDArray getEmbedding() throws Exception {
-        //TODO Task 5.4 - 20 Marks
+        // Ensure intSize is initialized
 
+        int intSize = getEmbeddingSize();
+        if (intSize == -1) {
+            throw new InvalidSizeException("Invalid size");
+        }
+
+        if (processedText.isEmpty()) {
+            throw new InvalidTextException("Invalid text");
+        }
+
+        int vectorSize = AdvancedNewsClassifier.listGlove.get(0).getVector().getVectorSize();
+        String[] splitText = processedText.split("\\s+");
+        INDArray newsEmbedding = Nd4j.create(splitText.length, vectorSize);
+
+        for (int i = 0; i < splitText.length; i++) {
+            String word = splitText[i];
+            for (Glove myGlove : AdvancedNewsClassifier.listGlove) {
+                if (myGlove.getVocabulary().equals(word)) {
+                    double[] gloveDouble = myGlove.getVector().getAllElements();
+                    INDArray ndjArray = Nd4j.create(gloveDouble);
+                    newsEmbedding.putRow(i, ndjArray);
+                    break;
+                }
+            }
+        }
 
         return Nd4j.vstack(newsEmbedding.mean(1));
     }
-
     /***
      * Clean the given (_content) text by removing all the characters that are not 'a'-'z', '0'-'9' and white space.
      * @param _content Text that need to be cleaned.

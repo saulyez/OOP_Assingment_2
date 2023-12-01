@@ -102,7 +102,7 @@ public class AdvancedNewsClassifier {
                 for (Glove myglove : listGlove) {
                     if (myglove.getVocabulary().equals(word)) {
                         count++;
-                        break;  // Exit the inner loop when a match is found
+                        break;
                     }
                 }
             }
@@ -113,9 +113,9 @@ public class AdvancedNewsClassifier {
 
         int size = lengths.size();
             if (size % 2 == 0) {
-                int median1 = lengths.get(size / 2);
-                int median2 = lengths.get(size / 2 + 1);
-                intMedian = (median1 + median2) / 2;
+                int medianOriginal = lengths.get(size / 2);
+                int medianSort = lengths.get(size / 2 + 1);
+                intMedian = (medianOriginal + medianSort) / 2;
             } else {
                 intMedian = lengths.get((size + 1) / 2);
             }
